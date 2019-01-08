@@ -12,11 +12,11 @@ class UzytkownikRepository
         $this->database = $conn;
     }
 
-    function create($user)
+    function create(Uzytkownik $user) : void 
     {
 
         $sql = "INSERT INTO projekt.uzytkownicy (login, haslo)
-            VALUES( '{$user->getLogin()}', '{$user->getHaslo()}' );";
+            VALUES( '{$user->getLogin()}', '{$user->getHaslo()}' ); ";
         echo $sql;
 
         if ($this->database->query($sql) === false) {
@@ -24,7 +24,7 @@ class UzytkownikRepository
         }
     }
 
-    function read($uzytkownikId) 
+    function read(int $uzytkownikId) : Uzytkownik
     {
         $toReturn = null;
 
@@ -45,9 +45,9 @@ class UzytkownikRepository
         return new Uzytkownik($argLogin, $argHaslo, $argId);
     }
 
-    function update($user) 
+    function update(Uzytkownik $user) : void 
     {
-        return null;
+       
     }
 
     function delete($uzytkownikId)
@@ -55,7 +55,7 @@ class UzytkownikRepository
 
     }
 
-    function findByLoginAndHaslo($login, $hasloHash)
+    function findByLoginAndHaslo(string $login, string $hasloHash) : ?Uzytkownik
     {
         $sql = "select * from uzytkownicy where " 
             ." login = '{$login}' and "
@@ -65,5 +65,7 @@ class UzytkownikRepository
         while($row = $result->fetch_assoc()) {
             return $this->fetchAssocToUzytkownik($row);
         }
+
+        return null;
     }
 }

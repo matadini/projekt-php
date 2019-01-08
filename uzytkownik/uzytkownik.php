@@ -3,18 +3,21 @@
 class Uzytkownik
 {
 
+    /**
+     * @var int|null
+     */
     private $uzytkownikId;
     private $login;
     private $haslo;
 
-    function __construct($login, $haslo, $uzytkownikId = null)
+    function __construct(string $login, string $haslo, ?int $uzytkownikId = null)
     {
         $this->login = $login;
         $this->haslo = $haslo;
         $this->uzytkownikId = $uzytkownikId;
     }
 
-    function getLogin()
+    function getLogin() 
     {
         return $this->login;
     }
