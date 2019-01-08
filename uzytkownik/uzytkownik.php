@@ -17,18 +17,68 @@ class Uzytkownik
         $this->uzytkownikId = $uzytkownikId;
     }
 
-    function getLogin() 
+    /**
+     * Get the value of login
+     */ 
+    public function getLogin()
     {
         return $this->login;
     }
 
-    function getHaslo()
+    /**
+     * Set the value of login
+     *
+     * @return  self
+     */ 
+    public function setLogin($login)
+    {
+        $this->login = $login;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of haslo
+     */ 
+    public function getHaslo()
     {
         return $this->haslo;
     }
-    function przedstawSie()
+
+    /**
+     * Set the value of haslo
+     *
+     * @return  self
+     */ 
+    public function setHaslo($haslo)
     {
-        return 'Login: ' . $this->login . ' Haslo: ' . $this->haslo;
+        $this->haslo = $haslo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of uzytkownikId
+     *
+     * @return  int|null
+     */ 
+    public function getUzytkownikId()
+    {
+        return $this->uzytkownikId;
+    }
+
+    /**
+     * Set the value of uzytkownikId
+     *
+     * @param  int|null  $uzytkownikId
+     *
+     * @return  self
+     */ 
+    public function setUzytkownikId($uzytkownikId)
+    {
+        $this->uzytkownikId = $uzytkownikId;
+
+        return $this;
     }
 }
 

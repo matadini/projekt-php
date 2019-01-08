@@ -28,7 +28,7 @@ class UzytkownikRepository
     {
         $toReturn = null;
 
-        $sql = "select * from uzytkownicy where uzytkownicy.uzytkownik_id = " . $uzytkownikId;
+        $sql = "select * from uzytkownicy where uzytkownicy.uzytkownik_id = {$uzytkownikId}";
         $result = $this->database->query($sql);
 
         while ($row = $result->fetch_assoc()) {
@@ -39,10 +39,14 @@ class UzytkownikRepository
     }
 
     private function fetchAssocToUzytkownik($row) {
+
         $argId = $row["uzytkownik_id"];
         $argLogin = $row["login"];
         $argHaslo = $row["haslo"];
-        return new Uzytkownik($argLogin, $argHaslo, $argId);
+
+        $toReturn = new Uzytkownik($argLogin, $argHaslo, $argId);
+        return $toReturn;
+
     }
 
     function update(Uzytkownik $user) : void 
