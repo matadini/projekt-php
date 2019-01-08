@@ -19,12 +19,15 @@ class UzytkownikService {
         $login = "admin";
         $hashPassword = md5("admin");
 
-        $user = $this->uzytkownikRepository->findByLoginAndHaslo($login, $hashPassword);
-        if($user === NULL) {
+        if(!$this->isExist($login, $hashPassword)) {
             $newUser = new Uzytkownik($login, $hashPassword);
             $this->uzytkownikRepository->create($newUser);
         }
+    }
 
+    function isExist(string $login, string $hashPassword) {
+        $user = $this->uzytkownikRepository->findByLoginAndHaslo($login, $hashPassword);
+        return ($user !== NULL) ; 
     }
 
 

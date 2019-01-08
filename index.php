@@ -10,6 +10,7 @@
 </head>
 <body>
 
+<div class="container-fluid">
 <?php
 include 'view.php';
 include 'database_connection.php';
@@ -17,91 +18,47 @@ include 'uzytkownik/uzytkownik_repository.php';
 include 'uzytkownik/uzytkownik_service.php';
 
 /**
- * Utworz domyslnego uzytkownika jak ten nie istnieje
+ * Polaczenie do bazy
  */
 $connection = DatabaseConnection::createDefaultConnection();
+
+/**
+ * Utworz domyslnego uzytkownika jak ten nie istnieje
+ */
 $repository = new UzytkownikRepository($connection);
 $service = new UzytkownikService($repository);
 $service->createDefault();
-$connection->close();
+
 
 /**
  * Pokaz formularz do logowania
  */
-generateLoginView();
+
+Views::generateLoginView();
 
 /**
- * Create
+ * Sprawdz logowanie
  */
-// $user = new Uzytkownik("mateusz", md5("haslo"));
-// $repository->create($user);
+if(isset($_POST["btnSubmit"])) {
 
+    if($service->isExist($_POST["login"], md5($_POST["password"]))) {
+
+        echo 
+        "<script language='JavaScript' type='text/javascript'>
+        location.href='strony/pacj_app.php';
+        </script>";
+
+    } else {
+        echo "</br>niepoprawne dane do logowania<br>";
+    }
+}
 /**
- * Read
+ * Zamknij polaczenie do bazy
  */
-// $uzytkownikRead1 = $repository->read(1);
-// var_dump($uzytkownikRead1);
-
-// $uzytkownikRead2 = $repository->findByLoginAndHaslo("mateusz", md5("haslo"));
-// var_dump($uzytkownikRead2);
-
-/**
- * Update 
- */
-
-/** 
- * Delete 
- */
-// $connection->close();
-
-// if(filter_input(INPUT_POST, "pacj_submit")) {
-//     echo 'elo';
-// }
-
-// if (isset($_POST['btnSubmit'])) {
-//     echo header('Location: ', 'application.php'); 
-//     die();
-// } else {
-//     generateLoginView();
-// }
+$connection->close();
 ?>
 
-<form method="POST" action="index.php">
-    <table class="table table-hover table-striped table-bordered">
-        <tr>
-            <td>Imię: </td>
-            <td><input name="pacj_imie" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Nazwisko: </td>
-            <td><input name="pacj_nazwisko" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>PESEL: </td>
-            <td><input name="pacj_pesel" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>Płeć: </td>
-            <td>
-                <select name='pacj_plec' class="form-control">
-                    <option value="mezczyzna"> Mężczyzna </option>
-                    <option value="kobieta"> Kobieta </option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Data urodzenia: </td>
-            <td><input name="pacj_data_urodzenia" class="form-control"></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" name="pacj_submit" value="Dodaj" class="btn btn-success">
-                <input type="reset" name="pacj_reset" value="Reset" class="btn btn-danger">
-            </td>
-        </tr>
-
-    </table>
-</form>
+</div>
 </body>
 </html>
 
