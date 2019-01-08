@@ -24,6 +24,26 @@ class PacjentRepository {
         }
     }
 
+    function findAll() {
+
+        $tablica = array();
+
+        $sql = "SELECT pacjent_id, imie, nazwisko, pesel, plec, data_urodzenia FROM projekt.pacjenci";
+        $result = $this->database->query($sql);
+        
+        if ($result->num_rows > 0) {
+            
+            while ($row = $result->fetch_assoc()) {
+                $pacjent = $this->fetchAssocToPacjent($row);
+                $tablica[$pacjent->getPacjentId()] = $pacjent;
+            }
+            return $tablica;
+
+        } else {
+            return null;
+        }
+    }
+
     function findByPesel(string $pesel) : ?Pacjent {
 
         $sql = "SELECT pacjent_id, imie, nazwisko, pesel, plec, data_urodzenia FROM projekt.pacjenci where pesel = {$pesel}";
