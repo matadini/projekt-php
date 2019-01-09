@@ -13,7 +13,7 @@
 
 <?php
 include '../view.php';
-Views::generateNav();
+echo Views::generateNav();
 ?>
 
 <div class="container-fluid">

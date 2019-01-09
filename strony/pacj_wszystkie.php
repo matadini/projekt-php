@@ -10,9 +10,10 @@
 <body>
 
 <?php
-include '../view.php';
-Views::generateNav();
+    include '../view.php';
+    echo Views::generateNav();
 ?>
+
 
 <div class="container">
     <div class="center-block" >
@@ -34,35 +35,49 @@ Views::generateNav();
             if(isset($_POST["remove"])) {
                 $repository->delete($_POST["pacjentId"]);
             }
-            
-            if(isset($_POST["edit"])) {
-                echo "edytuj: " . $_POST["pacjentId"];
-            }
-            
+
             /**
-             * Wyprodukuj widok dla pobrnaych rekordow
+             * Zapisz po edycji
              */
-            $all = $repository->findAll();
-            if(!empty($all)) {
-                $html = "<table class='table table-hover table-striped table-bordered'>";
-                foreach($all as $pacjent) {
-                    $html .= "<tr>"
-                    . "<td> {$pacjent->getPacjentId()} </td>"
-                    . "<td> {$pacjent->getImie()} </td>"
-                    . "<td> {$pacjent->getNazwisko()} </td>"
-                    . "<td> {$pacjent->getPesel()} </td>"
-                    . "<td> {$pacjent->getPlec()} </td>"
-                    . "<td> {$pacjent->getDataUrodzenia()} </td>"
-                    . "<td> <form method=POST action=pacj_wszystkie.php><input class='btn btn-success' name='edit' type=submit value='Edytuj'/> <input name='pacjentId' type=hidden value={$pacjent->getPacjentId()}>  </form></td>"
-                    . "<td> <form method=POST action=pacj_wszystkie.php><input class='btn btn-danger' name='remove' type=submit value='Usuń'/> <input name='pacjentId' type=hidden value={$pacjent->getPacjentId()}>  </form></td>"
-                    . "</tr>";
-                }
-                
-                $html .= "</table>";
-                echo $html;
-            } else {
-                echo "Brak wprowadzonych pacjentów";
+            if(isset($_POST["pacj_edit_save"])) {
+
+                $pacjent = new Pacjent();
+                $pacjent->setPacjentId($_POST["pacjentId"]);
+                $pacjent->setImie($_POST["pacj_imie"]);
+                $pacjent->setNazwisko($_POST["pacj_nazwisko"]);
+                $pacjent->setPesel($_POST["pacj_pesel"]);
+                $pacjent->setPlec($_POST["pacj_plec"]);
+                $pacjent->setDataUrodzenia($_POST["pacj_data_urodzenia"]);
+                $repository->update($pacjent);
             }
+
+            if(isset($_POST["edit"])) {
+
+                $pacjentId = $_POST["pacjentId"];
+                $pacjent = $repository->read($pacjentId);
+                if($pacjent !== null) {
+                    echo Views::generateViewEdycja($pacjent);
+                } 
+
+            } else {
+            
+                /**
+                 * Wyprodukuj widok dla pobrnaych rekordow
+                 */
+                $all = $repository->findAll();
+                if(!empty($all)) {
+                    $html = "<table class='table table-hover table-striped table-bordered'>";
+                    foreach($all as $pacjent) {
+                        $html .= Views::generatePacjentTableRow($pacjent);
+                    }
+                    
+                    $html .= "</table>";
+                    echo $html;
+                } else {
+                    echo "Brak wprowadzonych pacjentów";
+                }
+            }
+
         
             $conn->close();
             

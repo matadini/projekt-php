@@ -11,13 +11,13 @@
 
 <?php
     include '../view.php';
-    Views::generateNav();
+    echo Views::generateNav();
 ?>
 
     <div class="container">
         <div class="center-block" >
             <?php
-                Views::generateDodawanie();
+               echo Views::generateDodawanie();
             ?>
         </div>
 

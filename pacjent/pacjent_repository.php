@@ -82,9 +82,19 @@ class PacjentRepository {
 
     }
 
-    function update(Pacjent $user) : void 
+    function update(Pacjent $pacjent) : void 
     {
        
+        $sql = "UPDATE projekt.pacjenci SET 
+            imie='{$pacjent->getImie()}', 
+            nazwisko='{$pacjent->getNazwisko()}', 
+            pesel='{$pacjent->getPesel()}',
+            plec='{$pacjent->getPlec()}',
+            data_urodzenia='{$pacjent->getDataUrodzenia()}'
+            WHERE pacjent_id={$pacjent->getPacjentId()}";
+        if ($this->database->query($sql) === false) {
+            echo $this->database->error;
+        }
     }
 
     function delete($pacjentId) : void
