@@ -14,6 +14,14 @@ include '../view.php';
 Views::generateNav();
 ?>
 
+
+<script>
+
+function elo(args) {
+document.getElementById("demo").innerHTML = "Hello JavaScript!" + args;
+}
+</script>
+
 <div class="container">
     <div class="center-block" >
         <?php
@@ -42,8 +50,8 @@ Views::generateNav();
                 . "<td> {$pacjent->getPesel()} </td>"
                 . "<td> {$pacjent->getPlec()} </td>"
                 . "<td> {$pacjent->getDataUrodzenia()} </td>"
-                . "<td> <a href='www.google.pl'>Edycja</a> </td>"
-                . "<td> <a href='www.google.pl'>Usuń</a> </td>"
+                . "<td> <a href=''>Edycja</a> </td>"
+                . "<td> <a id='demo'onClick='elo({$pacjent->getPacjentId()})' href='#' >Usuń </a></td>"
                 . "</tr>";
             }
 
