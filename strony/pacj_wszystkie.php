@@ -14,14 +14,6 @@ include '../view.php';
 Views::generateNav();
 ?>
 
-
-<script>
-
-function elo(args) {
-document.getElementById("demo").innerHTML = "Hello JavaScript!" + args;
-}
-</script>
-
 <div class="container">
     <div class="center-block" >
         <?php
@@ -34,31 +26,45 @@ document.getElementById("demo").innerHTML = "Hello JavaScript!" + args;
              */
             $conn = DatabaseConnection::createDefaultConnection();
             $repository = new PacjentRepository($conn);
-            $all = $repository->findAll();
-            $conn->close();
-
+            
+            /**
+             * Obsluga edycji i usuwania
+             */
+            
+            if(isset($_POST["remove"])) {
+                $repository->delete($_POST["pacjentId"]);
+            }
+            
+            if(isset($_POST["edit"])) {
+                echo "edytuj: " . $_POST["pacjentId"];
+            }
+            
             /**
              * Wyprodukuj widok dla pobrnaych rekordow
              */
-            $html = "<table class='table table-hover table-striped table-bordered'>";
-   
-            foreach($all as $pacjent) {
-                $html .= "<tr>"
-                . "<td> {$pacjent->getPacjentId()} </td>"
-                . "<td> {$pacjent->getImie()} </td>"
-                . "<td> {$pacjent->getNazwisko()} </td>"
-                . "<td> {$pacjent->getPesel()} </td>"
-                . "<td> {$pacjent->getPlec()} </td>"
-                . "<td> {$pacjent->getDataUrodzenia()} </td>"
-                . "<td> <a href=''>Edycja</a> </td>"
-                . "<td> <a id='demo'onClick='elo({$pacjent->getPacjentId()})' href='#' >Usuń </a></td>"
-                . "</tr>";
+            $all = $repository->findAll();
+            if(!empty($all)) {
+                $html = "<table class='table table-hover table-striped table-bordered'>";
+                foreach($all as $pacjent) {
+                    $html .= "<tr>"
+                    . "<td> {$pacjent->getPacjentId()} </td>"
+                    . "<td> {$pacjent->getImie()} </td>"
+                    . "<td> {$pacjent->getNazwisko()} </td>"
+                    . "<td> {$pacjent->getPesel()} </td>"
+                    . "<td> {$pacjent->getPlec()} </td>"
+                    . "<td> {$pacjent->getDataUrodzenia()} </td>"
+                    . "<td> <form method=POST action=pacj_wszystkie.php><input class='btn btn-success' name='edit' type=submit value='Edytuj'/> <input name='pacjentId' type=hidden value={$pacjent->getPacjentId()}>  </form></td>"
+                    . "<td> <form method=POST action=pacj_wszystkie.php><input class='btn btn-danger' name='remove' type=submit value='Usuń'/> <input name='pacjentId' type=hidden value={$pacjent->getPacjentId()}>  </form></td>"
+                    . "</tr>";
+                }
+                
+                $html .= "</table>";
+                echo $html;
+            } else {
+                echo "Brak wprowadzonych pacjentów";
             }
-
-            $html .= "</table>";
-
-
-            echo $html;
+        
+            $conn->close();
             
         ?>
     </div>

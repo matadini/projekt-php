@@ -87,8 +87,11 @@ class PacjentRepository {
        
     }
 
-    function delete($PacjentId)
+    function delete($pacjentId) : void
     {
+        $sql = "DELETE FROM projekt.pacjenci where pacjent_id = {$pacjentId}";
+        $stmt = $this->database->prepare($sql);
+        $stmt->execute();
 
     }
 
